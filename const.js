@@ -6,5 +6,4 @@ const commands = `
 /dog - Случайная собака
 `;
 
-
-module.exports.commands = commands
+module.exports.commands = commands;
