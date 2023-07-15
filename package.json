@@ -2,10 +2,10 @@
   "name": "telegrambot",
   "version": "1.0.0",
   "description": "",
-  "main": "app.ts",
+  "main": "src/app.ts",
   "scripts": {
-    "dev": "nodemon app.ts",
-    "start": "node app.ts"
+    "dev": "nodemon src/app.ts",
+    "start": "node src/app.ts"
   },
   "keywords": [],
   "author": "",
