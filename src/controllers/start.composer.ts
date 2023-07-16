@@ -1,8 +1,8 @@
 import { Markup, Composer } from 'telegraf';
 
-const start = new Composer();
+const startComposer = new Composer();
 
-start.start(async (ctx) => {
+startComposer.start(async (ctx) => {
   await ctx.replyWithHTML(`Приветствую <b>${ctx.message.from.first_name} ${ctx.message.from.last_name}!</b>`, Markup.keyboard(
     [
       [Markup.button.callback('☀️ Прогноз погоды', 'btn_weather')],
@@ -11,4 +11,4 @@ start.start(async (ctx) => {
   ).resize());
 });
 
-export default start;
+export default startComposer;
