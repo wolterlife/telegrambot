@@ -7,7 +7,7 @@ catComposer.hears(['😺 Кот', '/cat'], async (ctx) => {
   try {
     await getCat().then((res) => ctx.sendPhoto(res));
   } catch (e) {
-    console.log(e);
+    await ctx.reply('Произошла ошибка при загрузке картинки');
   }
 });
 

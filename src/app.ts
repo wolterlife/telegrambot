@@ -12,7 +12,6 @@ const bot = new Telegraf<IContext>(process.env.BOT_TOKEN || '');
 const stage = new Scenes.Stage<IContext>([weatherScene]);
 
 bot.use(session());
-
 bot.use(stage.middleware());
 bot.use(weatherComposer);
 bot.use(startComposer);
