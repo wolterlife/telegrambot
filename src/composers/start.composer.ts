@@ -1,4 +1,5 @@
 import { Markup, Composer } from 'telegraf';
+import addUser from '../controllers/User.controller';
 
 const startComposer = new Composer();
 
@@ -9,6 +10,7 @@ startComposer.start(async (ctx) => {
       [Markup.button.callback('😺 Кот', 'btn_cat'), Markup.button.callback('🐶 Собака', 'btn_dog')],
     ],
   ).resize());
+  await addUser(ctx.chat.id, ctx.from.username);
 });
 
 export default startComposer;
