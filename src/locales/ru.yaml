@@ -1,0 +1,31 @@
+help: |
+  /start - Перезапуск бота
+  /help - Помощь
+  /weather - Прогноз погоды
+  /cat - Случайный кот
+  /dog - Случайная собака
+
+start: |
+  Приветствую <b>${ctx.message.from.first_name} ${ctx.message.from.last_name}!</b>
+
+weatherStart: |
+  Введите город для получения данных (/leave для отмены)
+
+weather: |
+  Погода в городе ${res.location.name} (${res.location.country})
+  Сейчас ${res.current.temp_c}° (ощущается ${res.current.feelslike_c}°), ${res.current.is_day ? 'день': 'ночь' }
+  Влажность: ${res.current.humidity}%
+  Облачность: ${res.current.cloud}%
+  Состояние: ${res.current.condition.text.toLowerCase()}
+  Скорость ветра: ${res.current.wind_kph} км/ч
+  
+  
+
+errorImg: |
+  Произошла ошибка при загрузке картинки
+
+errorInputCity: |
+  Введите корректное название
+
+errorGetWeather: |
+  Произошла ошибка при загрузке погоды

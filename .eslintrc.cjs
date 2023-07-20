@@ -17,6 +17,7 @@ module.exports = {
   ],
   rules: {
     'no-console': 'off',
+    'no-new': 0,
     'import/extensions': [
       'error',
       'ignorePackages',

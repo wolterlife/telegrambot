@@ -12,8 +12,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@edjopato/telegraf-i18n": "^0.2.2",
+    "@grammyjs/i18n": "^1.0.1",
     "axios": "^1.4.0",
     "dotenv": "^16.3.1",
+    "node-cron": "^3.0.2",
+    "node-schedule": "^2.1.1",
     "pg": "^8.11.1",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.32.1",
@@ -22,6 +26,8 @@
   },
   "devDependencies": {
     "@types/node": "^20.4.2",
+    "@types/node-cron": "^3.0.8",
+    "@types/node-schedule": "^2.1.0",
     "@types/validator": "^13.7.17",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
