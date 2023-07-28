@@ -1,5 +1,5 @@
 import AppDataSource from '../db';
-import User from '../models/User.model';
+import User from '../models/UserModel';
 
 async function addUser(chatId: number, userName?: string) {
   const userRepos = AppDataSource.getRepository(User);

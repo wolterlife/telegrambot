@@ -1,10 +1,9 @@
 import { Composer, Markup, Scenes } from 'telegraf';
 import IContext from '../interfaces/Context';
 import getWeather from '../api/weatherApi';
-import { subWeather, unsubWeather } from '../controllers/Weather.controller';
+import { subWeather, unsubWeather } from '../controllers/weatherController';
 import { i18n } from '../app';
 
-// Todo: переделать в контекст? Если в общий, - значение доставались с undefined.
 
 const weatherComposer = new Composer<IContext>();
 weatherComposer.hears(['/weather', '☀️ Прогноз погоды'], async (ctx) => ctx.scene.enter('sceneWeather'));
@@ -50,7 +49,7 @@ cityInfo.action('btn_weather_unsub', async (ctx) => {
 const weatherScene = new Scenes.WizardScene(
   'sceneWeather',
   async (ctx) => {
-    await ctx.reply(i18n.t('ru', 'weatherStart'), Markup.removeKeyboard());
+    await ctx.reply(i18n.t('ru', 'cityStart'), Markup.removeKeyboard());
     await ctx.wizard.next();
   },
   cityInfo,

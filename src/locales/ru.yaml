@@ -8,7 +8,7 @@ help: |
 start: |
   Приветствую <b>${ctx.message.from.first_name} ${ctx.message.from.last_name}!</b>
 
-weatherStart: |
+cityStart: |
   Введите город для получения данных (/leave для отмены)
 
 weather: |
@@ -18,8 +18,45 @@ weather: |
   Облачность: ${res.current.cloud}%
   Состояние: ${res.current.condition.text.toLowerCase()}
   Скорость ветра: ${res.current.wind_kph} км/ч
+
+weatherAlert: |
+  Ежедневное уведомление о погоде.
+  Погода в городе ${res.location.name} (${res.location.country})
+  Сейчас ${res.current.temp_c}° (ощущается ${res.current.feelslike_c}°), ${res.current.is_day ? 'день': 'ночь' }
+  Влажность: ${res.current.humidity}%
+  Облачность: ${res.current.cloud}%
+  Состояние: ${res.current.condition.text.toLowerCase()}
+  Скорость ветра: ${res.current.wind_kph} км/ч
+
+selectTypePlace: |
+  Выберите тип:
+
+placeResult: |
+  <b>${item.properties.name}</b>
+  Адрес: ${(item.properties.street ?? '')} ${(item.properties.housenumber ?? '')}
   
-  
+todoStart: |
+  Ваши задачи:
+
+inputDateForTask: |
+  Введите дату и время в формате ДД/ММ/ГГГГ ЧЧ:ММ
+
+oneTask: |
+  ${task.text} - ${task.dateAndTime}  
+
+oneTaskAlert: |
+  Напоминание о задаче:
+  ${sub.text} - ${sub.dateAndTime}  
+
+oneTaskAlertNew: |
+  Напоминание о задаче:
+  ${sub}
+
+taskSubGood: |
+  Напоминание успешно установлено!
+
+errorCityPlace: |
+  Город не найден, напишите /places для повтора
 
 errorImg: |
   Произошла ошибка при загрузке картинки
@@ -29,3 +66,9 @@ errorInputCity: |
 
 errorGetWeather: |
   Произошла ошибка при загрузке погоды
+
+errorGetPlace: |
+  Произошла ошибка при получении места
+
+errorGetTask: |
+  Неправильно введён номер задачи
