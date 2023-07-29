@@ -1,7 +1,7 @@
 import { Composer, Markup, Scenes } from 'telegraf';
 import IContext from '../interfaces/Context';
 import getWeather from '../api/weatherApi';
-import { subWeather, unsubWeather } from '../controllers/weatherController';
+import { subWeather, unsubWeatherByCity } from '../controllers/weatherController';
 import { i18n } from '../app';
 
 
@@ -29,7 +29,7 @@ cityInfo.on('message', async (ctx) => {
 cityInfo.action('btn_weather_sub', async (ctx) => {
   if (!ctx.update.callback_query.message) return;
   const cityName = ctx.update.callback_query.message;
-  const { chatId } = ctx.scene.session;
+  const chatId = ctx.scene.session.chatId;
   await ctx.editMessageReplyMarkup({
     inline_keyboard: [[Markup.button.callback('❌ Отписаться', 'btn_weather_unsub')]],
   });
@@ -43,7 +43,7 @@ cityInfo.action('btn_weather_unsub', async (ctx) => {
   await ctx.editMessageReplyMarkup({
     inline_keyboard: [[Markup.button.callback('☔ Получать ежедневный прогноз ', 'btn_weather_sub')]],
   });
-  await unsubWeather(chatId, cityName);
+  await unsubWeatherByCity(chatId, cityName);
 });
 
 const weatherScene = new Scenes.WizardScene(

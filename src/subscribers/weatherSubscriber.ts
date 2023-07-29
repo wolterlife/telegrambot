@@ -4,13 +4,14 @@ import {bot, i18n} from "../app";
 import getWeather from "../api/weatherApi";
 
 const dateToCron = (date: number) => {
-    const convert = new Date(date);
+    const convert = new Date(+date);
     const minutes = convert.getMinutes();
     const hours = convert.getHours();
     return `${minutes} ${hours} */1 * *`;
 };
 
 async function setNotificationWeather(owner: number, city: string, alertDate: number) {
+    console.log(owner, city, alertDate);
         schedule.scheduleJob(dateToCron(alertDate), async () =>
             await getWeather(city).then((res) => {
                     bot.telegram.sendMessage(owner, i18n.t('ru', 'weatherAlert', {res}))

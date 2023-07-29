@@ -13,10 +13,11 @@ import catComposer from './composers/catComposer';
 import dogComposer from './composers/dogComposer';
 import {subscribeWeatherAll} from './subscribers/weatherSubscriber';
 import {subscribeTaskAll} from "./subscribers/taskSubscriber";
+import {alertsComposer, alertsScene} from "./composers/alertsComposer";
 
 dotenv.config({path: './src/config/.env'});
 const bot = new Telegraf<IContext>(process.env.BOT_TOKEN || '');
-const stage = new Scenes.Stage<IContext>([weatherScene, placeScene, todoScene]);
+const stage = new Scenes.Stage<IContext>([weatherScene, placeScene, todoScene, alertsScene]);
 
 AppDataSource.initialize()
     .then(() => {
@@ -33,7 +34,6 @@ const i18n = new I18n({
     directory: './src/locales',
 });
 
-
 bot.use(session());
 bot.use(stage.middleware());
 bot.use(weatherComposer);
@@ -43,6 +43,7 @@ bot.use(startComposer);
 bot.use(helpComposer);
 bot.use(catComposer);
 bot.use(dogComposer);
+bot.use(alertsComposer);
 bot.launch();
 
 process.once('SIGINT', () => bot.stop('SIGINT'));

@@ -1,6 +1,8 @@
 import AppDataSource from "../db";
 import Task from "../models/TaskModel";
-import {setNotificationTask} from "../subscribers/taskSubscriber";
+import {setNotificationTask, subscribeTaskAll} from "../subscribers/taskSubscriber";
+import schedule from "node-schedule";
+import {subscribeWeatherAll} from "../subscribers/weatherSubscriber";
 
 async function addTask(owner: number, text: string, date: string) {
     const taskRepos = AppDataSource.getRepository(Task);
@@ -36,9 +38,30 @@ async function subTask(owner: number, task: string, alertDate: string,) {
     await setNotificationTask(owner, task, alertDate);
 }
 
+async function unsubTask(id: number) {
+    const taskRepos = AppDataSource.getRepository(Task);
+    await taskRepos.update({id}, {
+        alertTime: '',
+        isAlert: false,
+    })
+    await schedule.gracefulShutdown()
+    await subscribeWeatherAll();
+    await subscribeTaskAll();
+}
+
+
 async function getAllSubTasks() {
     return AppDataSource.getRepository(Task).find({
         where: {isAlert: true}
+    });
+}
+
+async function getUserSubTasks(currentOwner: number) {
+    return AppDataSource.getRepository(Task).find({
+        where: {
+            isAlert: true,
+            owner: currentOwner,
+        }
     });
 }
 
@@ -47,5 +70,7 @@ export {
     getUserTasks,
     removeTask,
     subTask,
+    unsubTask,
     getAllSubTasks,
+    getUserSubTasks,
 }

@@ -1,9 +1,13 @@
 help: |
   /start - Перезапуск бота
   /help - Помощь
+  /leave - Выход
   /weather - Прогноз погоды
   /cat - Случайный кот
   /dog - Случайная собака
+  /todo - Планировщик задач
+  /places - Рекомендация мест
+  /alerts - Список уведомлений
 
 start: |
   Приветствую <b>${ctx.message.from.first_name} ${ctx.message.from.last_name}!</b>
@@ -54,6 +58,17 @@ oneTaskAlertNew: |
 
 taskSubGood: |
   Напоминание успешно установлено!
+
+alertStart: |
+  Выберите тип уведомлений
+
+listWeather: |
+  Погода: ${sub.city}
+  Время подписки: ${sub.subTime}
+
+listTasks: |
+  Задача: ${sub.text} - ${sub.dateAndTime}
+  Время уведомления: ${sub.alertTime}
 
 errorCityPlace: |
   Город не найден, напишите /places для повтора
