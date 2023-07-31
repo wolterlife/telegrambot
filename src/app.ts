@@ -19,13 +19,7 @@ dotenv.config({path: './src/config/.env'});
 const bot = new Telegraf<IContext>(process.env.BOT_TOKEN || '');
 const stage = new Scenes.Stage<IContext>([weatherScene, placeScene, todoScene, alertsScene]);
 
-AppDataSource.initialize()
-    .then(() => {
-        console.log('db init');
-        subscribeWeatherAll();
-        subscribeTaskAll()
-    })
-    .catch((error) => console.log(error));
+
 
 const i18n = new I18n({
     defaultLanguage: 'ru',
@@ -44,7 +38,15 @@ bot.use(helpComposer);
 bot.use(catComposer);
 bot.use(dogComposer);
 bot.use(alertsComposer);
-bot.launch();
+
+AppDataSource.initialize()
+    .then(() => {
+        bot.launch();
+        console.log('db init');
+        subscribeWeatherAll();
+        subscribeTaskAll()
+    })
+    .catch((error) => console.log(error));
 
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));
