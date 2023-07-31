@@ -11,7 +11,6 @@ const dateToCron = (date: number) => {
 };
 
 async function setNotificationWeather(owner: number, city: string, alertDate: number) {
-    console.log(owner, city, alertDate);
         schedule.scheduleJob(dateToCron(alertDate), async () =>
             await getWeather(city).then((res) => {
                     bot.telegram.sendMessage(owner, i18n.t('ru', 'weatherAlert', {res}))

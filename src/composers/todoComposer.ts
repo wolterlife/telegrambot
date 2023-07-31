@@ -2,9 +2,13 @@ import {Composer, deunionize, Markup, Scenes} from "telegraf";
 import IContext from "../interfaces/Context";
 import {i18n} from "../app";
 import {addTask, getUserTasks, removeTask, subTask} from "../controllers/taskController";
+import leaveFoo from "./leaveComposer";
+import {message} from "telegraf/filters";
 
 const todoComposer = new Composer<IContext>();
-todoComposer.hears(['/todo', '📒 Задачи'], async (ctx) => ctx.scene.enter('sceneTodo'));
+todoComposer.hears(['/todo', '📒 Задачи'], async (ctx) => {
+    await ctx.scene.enter('sceneTodo')
+});
 
 const welcomeTodo = async (ctx: IContext) => {
     await ctx.reply(i18n.t('ru', 'todoStart'),
@@ -14,7 +18,8 @@ const welcomeTodo = async (ctx: IContext) => {
             ],
         ).resize()
     );
-        ctx.scene.session.tasks = await getUserTasks(ctx.message ? ctx.message.chat.id : ctx.scene.session.chatId)
+    if (ctx.message) ctx.session.chatId = ctx.message.chat.id;
+        ctx.scene.session.tasks = await getUserTasks(ctx.session.chatId)
         if (ctx.scene.session.tasks.length) {
             await ctx.reply(ctx.scene.session.tasks
                 .map(({text, dateAndTime}, index) => `${index + 1} - ${text} (${dateAndTime})`)
@@ -24,7 +29,7 @@ const welcomeTodo = async (ctx: IContext) => {
 };
 
 const actionSelector = new Composer<IContext>()
-actionSelector.command('leave', (ctx) => ctx.scene.leave());
+actionSelector.command('leave', leaveFoo())
 actionSelector.hears('Добавить задачу', (ctx) => {
     ctx.reply('Введите задачу')
     ctx.wizard.selectStep(2);
@@ -35,35 +40,23 @@ actionSelector.hears('Выбрать задачу', (ctx) => {
 })
 
 const addTaskDate = new Composer<IContext>()
-addTaskDate.command('leave', (ctx) => ctx.scene.leave());
-addTaskDate.on('message', async (ctx) => {
-    if (!('text' in ctx.message)) {
-        ctx.reply(i18n.t('ru', 'errorInputCity'));
-        return;
-    }
+addTaskDate.command('leave', leaveFoo())
+addTaskDate.on(message('text'), async (ctx) => {
     ctx.reply(i18n.t('ru', 'inputDateForTask'))
     ctx.scene.session.taskDate = ctx.message.text;
     ctx.wizard.selectStep(3)
 })
 
 const addTaskResult = new Composer<IContext>()
-addTaskResult.command('leave', (ctx) => ctx.scene.leave());
-addTaskResult.on('message', async (ctx) => {
-    if (!('text' in ctx.message)) {
-        ctx.reply(i18n.t('ru', 'errorInputCity'));
-        return;
-    }
+addTaskResult.command('leave', leaveFoo())
+addTaskResult.on(message('text'), async (ctx) => {
     await addTask(ctx.message.chat.id, ctx.scene.session.taskDate, ctx.message.text)
     ctx.scene.reenter()
 })
 
 const openTask = new Composer<IContext>()
-openTask.command('leave', (ctx) => ctx.scene.leave());
-openTask.on('message', (ctx) => {
-    if (!('text' in ctx.message)) {
-        ctx.reply(i18n.t('ru', 'errorInputCity'));
-        return;
-    }
+openTask.command('leave', leaveFoo())
+openTask.on(message('text'), (ctx) => {
     ctx.scene.session.chatId = ctx.message.chat.id;
     let task = ctx.scene.session.tasks[+ctx.message.text - 1]
     if (task) {
@@ -93,9 +86,9 @@ openTask.action('btn_task_notification', async (ctx) => {
 })
 
 const addNotification = new Composer<IContext>()
-addNotification.on('message', async (ctx) => {
+addNotification.on(message('text'), async (ctx) => {
     const task = ctx.scene.session.taskText;
-    const alertDate = deunionize(ctx.message).text;
+    const alertDate = ctx.message.text;
     const owner = ctx.scene.session.chatId;
     if (task && alertDate) await subTask(owner, task, alertDate);
     await ctx.reply(i18n.t('ru', 'taskSubGood'))
