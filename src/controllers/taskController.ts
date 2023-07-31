@@ -16,7 +16,6 @@ async function addTask(owner: number, text: string, date: string) {
 }
 
 async function getUserTasks(currentOwner: number) {
-    console.log(currentOwner);
     const taskRepos = AppDataSource.getRepository(Task)
     return await taskRepos.find({where: {owner: currentOwner}})
 }
