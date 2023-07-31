@@ -3,7 +3,8 @@ import {getAllSubTasks} from "../controllers/taskController";
 import {bot, i18n} from "../app";
 
 const dateToCron = (date: string) => {
-    const convert = new Date(+Date.parse(date.replace(/([0-9]+)\/([0-9]+)/,'$2/$1')));
+    const DDMMFormat = date.replace(/([0-9]+)\/([0-9]+)/,'$2/$1'); // 12/02/2022 14:44 = 02/12/2022 14:44
+    const convert = new Date(+Date.parse(DDMMFormat));
     const minutes = convert.getMinutes();
     const hours = convert.getHours();
     const days = convert.getDate();

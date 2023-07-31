@@ -62,7 +62,7 @@ alertStart: |
 
 listWeather: |
   Погода: ${sub.city}
-  Время подписки: ${sub.subTime}
+  Время подписки: ${new Date(+sub.subTime).toLocaleString('ru')} 
 
 listTasks: |
   Задача: ${sub.text} - ${sub.dateAndTime}

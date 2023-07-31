@@ -4,7 +4,6 @@ import {setNotificationWeather, subscribeWeatherAll} from '../subscribers/weathe
 import {subscribeTaskAll} from "../subscribers/taskSubscriber";
 import schedule from "node-schedule";
 
-// TODO: fix any type;
 async function subWeather(ownerId: number, cityName?: any) {
     const currentDate = Date.now();
     const weatherRepos = AppDataSource.getRepository(Weather);
