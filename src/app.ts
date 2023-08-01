@@ -1,25 +1,24 @@
 import 'reflect-metadata';
 import dotenv from 'dotenv';
 import {I18n} from '@edjopato/telegraf-i18n';
+import { limit } from "@grammyjs/ratelimiter"
 import {Scenes, session, Telegraf} from 'telegraf';
 import IContext from './interfaces/Context';
 import AppDataSource from './db';
 import {weatherComposer, weatherScene} from './composers/weatherComposer';
 import {placeComposer, placeScene} from "./composers/placeComposer";
 import {todoComposer, todoScene} from "./composers/todoComposer";
+import {alertsComposer, alertsScene} from "./composers/alertsComposer";
 import startComposer from './composers/startComposer';
 import helpComposer from './composers/helpComposer';
 import catComposer from './composers/catComposer';
 import dogComposer from './composers/dogComposer';
 import {subscribeWeatherAll} from './subscribers/weatherSubscriber';
 import {subscribeTaskAll} from "./subscribers/taskSubscriber";
-import {alertsComposer, alertsScene} from "./composers/alertsComposer";
 
 dotenv.config({path: './src/config/.env'});
 const bot = new Telegraf<IContext>(process.env.BOT_TOKEN || '');
 const stage = new Scenes.Stage<IContext>([weatherScene, placeScene, todoScene, alertsScene]);
-
-
 
 const i18n = new I18n({
     defaultLanguage: 'ru',
@@ -27,6 +26,12 @@ const i18n = new I18n({
     allowMissing: false,
     directory: './src/locales',
 });
+
+bot.use(limit({
+    timeFrame: 2000,
+    limit: 1,
+    onLimitExceeded: ctx => { ctx.reply("Помедленее! Вы отправляете сообщения слишком часто 😞") },
+}));
 
 bot.use(session());
 bot.use(stage.middleware());
@@ -38,6 +43,7 @@ bot.use(helpComposer);
 bot.use(catComposer);
 bot.use(dogComposer);
 bot.use(alertsComposer);
+
 
 AppDataSource.initialize()
     .then(() => {
