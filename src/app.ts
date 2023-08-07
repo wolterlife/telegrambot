@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import dotenv from 'dotenv';
+import 'dotenv/config.js'
 import {I18n} from '@edjopato/telegraf-i18n';
 import { limit } from "@grammyjs/ratelimiter"
 import {Scenes, session, Telegraf} from 'telegraf';
@@ -16,7 +16,6 @@ import dogComposer from './composers/dogComposer';
 import {subscribeWeatherAll} from './subscribers/weatherSubscriber';
 import {subscribeTaskAll} from "./subscribers/taskSubscriber";
 
-dotenv.config({path: './src/config/.env'});
 const bot = new Telegraf<IContext>(process.env.BOT_TOKEN || '');
 const stage = new Scenes.Stage<IContext>([weatherScene, placeScene, todoScene, alertsScene]);
 
