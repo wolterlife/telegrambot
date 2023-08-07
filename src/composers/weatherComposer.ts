@@ -18,6 +18,11 @@ const welcomeWeather = async (ctx: IContext) => {
 const cityInfo = new Composer<IContext>();
 cityInfo.command('leave', leaveFoo());
 cityInfo.on(message('text'), async (ctx) => {
+    if (ctx.message.text.match(/\/.+/)) {
+        ctx.reply(`Вы вышли с сервиса. Повторите команду ${ctx.message.text}`)
+        ctx.scene.leave();
+        return;
+    }
     await getWeather(ctx.message.text)
         .then((res) => {
             ctx.scene.session.chatId = ctx.message.chat.id;
